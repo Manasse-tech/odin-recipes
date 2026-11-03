@@ -1,16 +1,651 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title> Recette  </title>
-</head>
-<body>
-    <h1> RECETTE D'ODIN </h1>
-    <ul class="recipe-list">
-        <li><a href="recipes/nouille.html">Nouilles sautées aux légumes</a></li>
-        <li><a href="recipes/riz-saute.html">Riz sauté aux légumes</a></li>
-        <li><a href="recipes/omelette.html">Omelette aux légumes</a></li>
-      </ul>
-</body>
+<html lang="fr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Recettes du Monde | Odin Recipes</title>
+    <style>
+      :root {
+        --bg: #fffaf4;
+        --card: #ffffff;
+        --primary: #d97706;
+        --primary-dark: #b45309;
+        --secondary: #fef3c7;
+        --text: #1f2937;
+        --muted: #6b7280;
+        --shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+        --radius: 18px;
+      }
+
+      * {
+        box-sizing: border-box;
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      body {
+        margin: 0;
+        font-family: Arial, Helvetica, sans-serif;
+        background: linear-gradient(180deg, #fffaf4 0%, #fff 100%);
+        color: var(--text);
+      }
+
+      a {
+        text-decoration: none;
+      }
+
+      .container {
+        width: min(1200px, 90%);
+        margin: 0 auto;
+      }
+
+      .topbar {
+        background: rgba(255, 255, 255, 0.7);
+        backdrop-filter: blur(8px);
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        border-bottom: 1px solid rgba(0, 0, 0, 0.05);
+      }
+
+      .nav {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 16px 0;
+      }
+
+      .brand {
+        font-size: 1.4rem;
+        font-weight: 700;
+        color: var(--primary-dark);
+      }
+
+      .nav-links {
+        display: flex;
+        gap: 18px;
+        flex-wrap: wrap;
+      }
+
+      .nav-links a {
+        color: var(--text);
+        font-weight: 600;
+      }
+
+      .hero {
+        padding: 60px 0 30px;
+      }
+
+      .hero-box {
+        display: grid;
+        grid-template-columns: 1.2fr 0.8fr;
+        gap: 30px;
+        align-items: center;
+        background: linear-gradient(135deg, #fff7ed, #fffdf3);
+        border-radius: 28px;
+        padding: 36px;
+        box-shadow: var(--shadow);
+      }
+
+      .eyebrow {
+        display: inline-block;
+        background: var(--secondary);
+        color: var(--primary-dark);
+        padding: 8px 12px;
+        border-radius: 999px;
+        font-size: 0.8rem;
+        font-weight: 700;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+
+      h1 {
+        font-size: clamp(2.2rem, 4vw, 4rem);
+        margin: 18px 0 12px;
+        line-height: 1.1;
+      }
+
+      .hero p {
+        font-size: 1.05rem;
+        color: var(--muted);
+        line-height: 1.7;
+        margin: 0 0 20px;
+      }
+
+      .cta-row {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+      }
+
+      .btn {
+        display: inline-block;
+        padding: 12px 18px;
+        border-radius: 999px;
+        border: none;
+        font-weight: 700;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+      }
+
+      .btn:hover {
+        transform: translateY(-1px);
+      }
+
+      .btn-primary {
+        background: var(--primary);
+        color: white;
+      }
+
+      .btn-secondary {
+        background: white;
+        color: var(--text);
+        border: 1px solid rgba(0, 0, 0, 0.08);
+      }
+
+      .hero-visual {
+        background: linear-gradient(135deg, #f59e0b, #f97316);
+        border-radius: 24px;
+        min-height: 260px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .plate {
+        width: 200px;
+        height: 200px;
+        border-radius: 50%;
+        background: radial-gradient(circle at 30% 30%, #fff7ed, #facc15 35%, #f59e0b 100%);
+        box-shadow: inset 0 0 20px rgba(255,255,255,0.4);
+        position: relative;
+      }
+
+      .plate::before,
+      .plate::after {
+        content: "";
+        position: absolute;
+        border-radius: 50%;
+      }
+
+      .plate::before {
+        width: 70px;
+        height: 70px;
+        background: #34d399;
+        top: 36px;
+        left: 30px;
+      }
+
+      .plate::after {
+        width: 90px;
+        height: 90px;
+        background: #fb7185;
+        right: 28px;
+        bottom: 40px;
+      }
+
+      .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin: 40px 0 20px;
+      }
+
+      .section-header h2 {
+        margin: 0;
+        font-size: clamp(1.5rem, 3vw, 2.2rem);
+      }
+
+      .filters {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin: 20px 0 30px;
+      }
+
+      .chip {
+        background: #fff;
+        border: 1px solid rgba(0, 0, 0, 0.08);
+        color: var(--text);
+        border-radius: 999px;
+        padding: 8px 14px;
+        font-weight: 700;
+        cursor: pointer;
+      }
+
+      .chip.active {
+        background: var(--primary);
+        color: white;
+        border-color: var(--primary);
+      }
+
+      .recipe-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 22px;
+        padding-bottom: 60px;
+      }
+
+      .recipe-card {
+        background: var(--card);
+        border: 1px solid rgba(0, 0, 0, 0.05);
+        border-radius: var(--radius);
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+      }
+
+      .recipe-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 14px 30px rgba(0,0,0,0.12);
+      }
+
+      .recipe-image {
+        height: 140px;
+        background: linear-gradient(135deg, #fdba74, #f97316);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 3rem;
+      }
+
+      .recipe-body {
+        padding: 18px;
+      }
+
+      .tag {
+        display: inline-block;
+        background: #fff7ed;
+        color: var(--primary-dark);
+        font-size: 0.75rem;
+        font-weight: 700;
+        border-radius: 999px;
+        padding: 6px 10px;
+        margin-bottom: 10px;
+      }
+
+      .recipe-card h3 {
+        margin: 0 0 8px;
+        font-size: 1.1rem;
+      }
+
+      .meta {
+        display: flex;
+        justify-content: space-between;
+        color: var(--muted);
+        font-size: 0.8rem;
+        margin-bottom: 14px;
+      }
+
+      .recipe-card p {
+        color: var(--muted);
+        line-height: 1.6;
+        margin: 0 0 16px;
+        font-size: 0.92rem;
+      }
+
+      .card-link {
+        color: var(--primary-dark);
+        font-weight: 700;
+      }
+
+      footer {
+        text-align: center;
+        color: var(--muted);
+        padding: 20px 0 40px;
+      }
+
+      @media (max-width: 768px) {
+        .hero-box {
+          grid-template-columns: 1fr;
+          padding: 24px;
+        }
+
+        .nav {
+          flex-direction: column;
+          gap: 12px;
+        }
+
+        .section-header {
+          flex-direction: column;
+          align-items: flex-start;
+          gap: 10px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <header class="topbar">
+      <div class="container nav">
+        <div class="brand">🍽️ Odin Recipes</div>
+        <nav class="nav-links">
+          <a href="#recettes">Recettes</a>
+          <a href="#popular">Populaires</a>
+          <a href="#contact">Contact</a>
+        </nav>
+      </div>
+    </header>
+
+    <main class="container">
+      <section class="hero">
+        <div class="hero-box">
+          <div>
+            <span class="eyebrow">Cuisine facile & savoureuse</span>
+            <h1>Des recettes simples pour chaque moment de la journée.</h1>
+            <p>
+              Découvrez plus de 20 idées délicieuses, des plats rapides aux repas
+              gourmands. Une sélection pensée pour inspirer vos repas maison.
+            </p>
+            <div class="cta-row">
+              <a href="#recettes" class="btn btn-primary">Voir les recettes</a>
+              <a href="#" class="btn btn-secondary">Découvrir</a>
+            </div>
+          </div>
+
+          <div class="hero-visual">
+            <div class="plate"></div>
+          </div>
+        </div>
+      </section>
+
+      <section id="recettes">
+        <div class="section-header">
+          <h2>Nos recettes</h2>
+        </div>
+
+        <div class="filters">
+          <button class="chip active">Toutes</button>
+          <button class="chip">Petit-déjeuner</button>
+          <button class="chip">Déjeuner</button>
+          <button class="chip">Dîner</button>
+          <button class="chip">Desserts</button>
+        </div>
+
+        <div class="recipe-grid">
+          <article class="recipe-card">
+            <div class="recipe-image">🥗</div>
+            <div class="recipe-body">
+              <span class="tag">Déjeuner</span>
+              <h3>Nouilles sautées aux légumes</h3>
+              <div class="meta"><span>15 min</span><span>Facile</span></div>
+              <p>Des légumes croquants et une sauce parfumée pour un repas rapide.</p>
+              <a href="recipes/nouille.html" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍚</div>
+            <div class="recipe-body">
+              <span class="tag">Déjeuner</span>
+              <h3>Riz sauté aux légumes</h3>
+              <div class="meta"><span>20 min</span><span>Facile</span></div>
+              <p>Un classique réconfortant, coloré et très facile à préparer.</p>
+              <a href="recipes/riz-saute.html" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍳</div>
+            <div class="recipe-body">
+              <span class="tag">Petit-déjeuner</span>
+              <h3>Omelette aux légumes</h3>
+              <div class="meta"><span>10 min</span><span>Facile</span></div>
+              <p>Moelleuse, légère et idéale pour commencer la journée.</p>
+              <a href="recipes/omelette.html" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🥞</div>
+            <div class="recipe-body">
+              <span class="tag">Petit-déjeuner</span>
+              <h3>Pancakes aux myrtilles</h3>
+              <div class="meta"><span>25 min</span><span>Facile</span></div>
+              <p>Des pancakes moelleux avec des fruits frais et une touche sucrée.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍛</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Poulet au curry</h3>
+              <div class="meta"><span>35 min</span><span>Moyen</span></div>
+              <p>Un plat épicé, riche et ultra parfumé à servir avec du riz.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🥗</div>
+            <div class="recipe-body">
+              <span class="tag">Déjeuner</span>
+              <h3>Salade de quinoa</h3>
+              <div class="meta"><span>15 min</span><span>Facile</span></div>
+              <p>Bonne source d’énergie, fraîche et parfaite pour le midi.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍝</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Lasagnes végétariennes</h3>
+              <div class="meta"><span>50 min</span><span>Moyen</span></div>
+              <p>Une version généreuse avec légumes, fromage et sauce tomate.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🥔</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Gratin de pommes de terre</h3>
+              <div class="meta"><span>40 min</span><span>Facile</span></div>
+              <p>Un plat rustique, fondant et parfait pour le dîner en famille.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🐟</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Poisson grillé au citron</h3>
+              <div class="meta"><span>20 min</span><span>Facile</span></div>
+              <p>Un poisson léger et parfumé, parfait avec du riz ou des légumes.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🌮</div>
+            <div class="recipe-body">
+              <span class="tag">Déjeuner</span>
+              <h3>Tacos végétariens</h3>
+              <div class="meta"><span>20 min</span><span>Facile</span></div>
+              <p>Des tacos croustillants remplis de légumes et de haricots.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🥣</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Soupe de lentilles</h3>
+              <div class="meta"><span>30 min</span><span>Facile</span></div>
+              <p>Confortante, nutritive et idéale lors des jours frais.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🌯</div>
+            <div class="recipe-body">
+              <span class="tag">Déjeuner</span>
+              <h3>Wraps au poulet</h3>
+              <div class="meta"><span>15 min</span><span>Facile</span></div>
+              <p>Des wraps simples à préparer et parfaits à emporter.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍰</div>
+            <div class="recipe-body">
+              <span class="tag">Desserts</span>
+              <h3>Gâteau au chocolat</h3>
+              <div class="meta"><span>45 min</span><span>Moyen</span></div>
+              <p>Un dessert fondant et irrésistible pour les amateurs de chocolat.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🥤</div>
+            <div class="recipe-body">
+              <span class="tag">Boisson</span>
+              <h3>Smoothie banane</h3>
+              <div class="meta"><span>10 min</span><span>Facile</span></div>
+              <p>Une boisson saine, rapide et pleine de vitamines.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍅</div>
+            <div class="recipe-body">
+              <span class="tag">Entrée</span>
+              <h3>Bruschetta tomate</h3>
+              <div class="meta"><span>10 min</span><span>Facile</span></div>
+              <p>Une entrée légère et pleine de fraîcheur à servir en apéritif.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🥘</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Boulgour aux légumes</h3>
+              <div class="meta"><span>25 min</span><span>Facile</span></div>
+              <p>Un plat équilibré, savoureux et chargé de légumes.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍲</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Risotto aux champignons</h3>
+              <div class="meta"><span>35 min</span><span>Moyen</span></div>
+              <p>Un plat crémeux, riche et très agréable en hiver.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍔</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Burger maison</h3>
+              <div class="meta"><span>25 min</span><span>Facile</span></div>
+              <p>Une recette gourmande, réalisée avec des ingrédients simples.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🌶️</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Chili con carne</h3>
+              <div class="meta"><span>40 min</span><span>Moyen</span></div>
+              <p>Un plat chaud et épicé parfait pour un dîner réconfortant.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍤</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Paella aux fruits de mer</h3>
+              <div class="meta"><span>45 min</span><span>Moyen</span></div>
+              <p>Un plat festif, coloré et très généreux en saveurs.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍝</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Pâtes carbonara</h3>
+              <div class="meta"><span>20 min</span><span>Facile</span></div>
+              <p>Des pâtes crémeuses, riches et parfaites pour un repas goûtu.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🥩</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Bœuf bourguignon</h3>
+              <div class="meta"><span>90 min</span><span>Difficile</span></div>
+              <p>Un classique de cuisine, tendre et profond en saveur.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍛</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Couscous végétarien</h3>
+              <div class="meta"><span>40 min</span><span>Moyen</span></div>
+              <p>Un plat généreux et parfumé aux épices et légumes.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🥞</div>
+            <div class="recipe-body">
+              <span class="tag">Dessert</span>
+              <h3>Crêpes aux pommes</h3>
+              <div class="meta"><span>20 min</span><span>Facile</span></div>
+              <p>Des crêpes douillettes avec des pommes fondantes et parfumées.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+
+          <article class="recipe-card">
+            <div class="recipe-image">🍣</div>
+            <div class="recipe-body">
+              <span class="tag">Dîner</span>
+              <h3>Sushis maison</h3>
+              <div class="meta"><span>50 min</span><span>Difficile</span></div>
+              <p>Une recette créative qui apporte une touche japonaise unique.</p>
+              <a href="#" class="card-link">Voir la recette →</a>
+            </div>
+          </article>
+        </div>
+      </section>
+    </main>
+
+    <footer id="contact">
+      © 2026 Odin Recipes - Tous droits réservés
+    </footer>
+  </body>
 </html>
